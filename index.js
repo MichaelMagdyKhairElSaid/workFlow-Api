@@ -1,9 +1,12 @@
-doenv.config({});
+
 import express from 'express';
 import dbConnection from './database/db_connection.js';
 import employeeRouter from './src/modules/employee/employee.routes.js';
+import { configDotenv } from 'dotenv';
 const app = express();
 const port = 3000;
+
+configDotenv(); // Add this line to configure dotenv
 
 dbConnection();
 app.use(express.json());

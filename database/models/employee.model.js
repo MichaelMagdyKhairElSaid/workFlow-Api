@@ -47,12 +47,12 @@ verified:{
 },
 }, {timestamps: true});
 
-userSchema.pre("save",function () { //return document that is object
+employeeSchema.pre("save",function () { //return document that is object
     // console.log(this); //document
      this.password = bcrypt.hashSync(this.password,Number(process.env.SALT_ROUNDS))
 })
 
-userSchema.pre("findOneAndUpdate",function () { //return all query rleatd and not rleated to my document
+employeeSchema.pre("findOneAndUpdate",function () { //return all query rleatd and not rleated to my document
     console.log("this =============="+ this); //query
     console.log("Number(process.env.SALT_ROUNDS) ="+Number(process.env.SALT_ROUNDS));
     
