@@ -1,8 +1,19 @@
 
 import express from 'express';
-const Router = express.Router();
+const userRouter = express.Router();
 import * as employeeController from './employee.controller.js';
+import { validation } from '../../utils/handler/validation.js';
+import { addUserSchema, editUserSchema } from "./employee.validation.js";
+import { allowTo, protectRoutes } from '../auth/auth.controller.js';
+userRouter
+  .route("/")
+  .get(employeeController.getAllUsers)
+  .post(protectRoutes,allowTo("admin"),employeeController.addUser);
 
-Router.post("/",employeeController.addEmployee);
+userRouter
+  .route("/:id")
+  .get(employeeController.getUserById)
+  .put(protectRoutes,allowTo("admin"),employeeController.editUser)
+  .delete(protectRoutes,allowTo("admin"),employeeController.deleteUser);
 
-export default Router;
+export default userRouter;
