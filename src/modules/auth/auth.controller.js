@@ -25,7 +25,7 @@ export const signIn =catchAsyncError(async(req, res, next)=>{
     if(!token) return next(new AppError('please provide token',401))
         //2-verify token
     let decoded = await jwt.verify(token,process.env.ENCYPTION_KEY)
-    console.log(decoded);
+    if(!decoded) return next(new AppError("invalid or expired token",401))
         //3-if user of token exist or not
     let user = await employeeModel.findById(decoded.userld)
     if(!user)return next(new AppError("invalid user",404))
@@ -41,7 +41,6 @@ export const signIn =catchAsyncError(async(req, res, next)=>{
 
     export const allowTo = (...role)=>{ //NOTE: spread operator collect prameter as array
         return catchAsyncError(async(req,res,next)=>{
-            console.log("role =====",!role.includes(req.user.role));  
             if(!role.includes(req.user.role)) return next(new AppError("not authorized",403))
          next()
      })

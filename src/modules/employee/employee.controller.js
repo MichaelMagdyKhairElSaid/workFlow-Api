@@ -1,48 +1,64 @@
 import employeeModel from "../../../database/models/employee.model.js";
 import deleteOne from "../../utils/handler/refactor.handler.js";
 import  catchAsyncError  from "../../utils/middleware/catchAsyncError.js";
+import ApiFeature from "../../utils/services/ApiFeatures.js";
 import AppError from "../../utils/services/AppError.js";
+import cloudinary from "../../utils/services/cloudinary.js";
 
-// export const addEmployee = async (req, res) => {
-// const {name, email, phone, password,address,gender,birthDate,social_status,fingerPrint,role} = req.body;
-// console.log(req.body);
-// const user = await employeeModel.create({name,email,phone,password,address,gender,birthDate,social_status,fingerPrint,role})
-// res.json({message:"Employee added successfully",data:user});
-// }
-
-// export const getEmployee = async (req, res) => {
-// const user = await employeeModel.findAll();
-// res.json({message:"done",data:user});
-// }
-
-// export const getEmployeeById = async (req, res) => {
-// const {id} = req.params;
-// const user = await employeeModel.findById(id);
-// res.json({message:"done",data:user});
-// }
 export const addUser = catchAsyncError(async (req, res, next) => {
+  //find if email is already exist
     let user = await employeeModel.findOne({ email: req.body.email });
     if (user) return next(new AppError("Duplicated Email", 409));
+  
+    //image upload
+    console.log("req.file===",req.file);
+  if (req.file) {
+
+    let {secure_url,public_id} =await cloudinary.uploader.upload(req.file.path,{folder:`workflow/${req.user.role}`})
+    req.body.image = {secure_url,public_id};
+    }
+    
+    //save to database
     let results = new employeeModel(req.body);
     let add = await results.save();
     res.status(201).json({message: "Added", add });
   });
-  export const getAllUsers = async (req, res) => {
-    let user = await employeeModel.find({});
-    res.json({message: "Done", user });
-  };
+
+  export const getAllUsers =catchAsyncError( async (req, res) => {
+    let apiFeature= new ApiFeature(employeeModel.find(),req.query).pagination().filter().sort().search().fields()
+    let result = await apiFeature.mongooseQuery
+    res.json({message:"Done",result});
+  })
+
   export const getUserById = catchAsyncError(async (req, res, next) => {
       let { _id } = req.params;
       let user = await employeeModel.findById(_id);
       res.json({message: "Done", user });
     });
+
   export const editUser = catchAsyncError(async (req, res, next) => {
-    let { _id } = req.params;
-    console.log("req.params===",req.body);
-    delete req.body.password;
-    let user = await employeeModel.findByIdAndUpdate(_id, req.body, { new: true });
+    let { id } = req.params;
+   const findUser = await employeeModel.findById(id);
+    //image upload
+    if (req.file) {
+    findUser.image && await cloudinary.uploader.destroy(findUser.image.public_id)
+
+    let {secure_url,public_id} =await cloudinary.uploader.upload(req.file.path,{folder:`workflow/${req.user.role}`})
+     req.body.image = {secure_url,public_id};
+      }
+
+    delete req.body.password; // to avoid changing password
+    let user = await employeeModel.findByIdAndUpdate(id, req.body, { new: true });
     !user && next(new AppError("Employee not found", 404));
     user && res.json({message: "Done", user });
   });
   
-  export const deleteUser = deleteOne(employeeModel);
+  export const deleteUser = catchAsyncError(async (req, res, next) => {
+    let { id } = req.params;
+    const findUser = await employeeModel.findById(id);
+    findUser.image && await cloudinary.uploader.destroy(findUser.image.public_id)
+    let user = await employeeModel.findByIdAndDelete(id);
+    !user && next(new AppError("Employee not found", 404));
+    user && res.json({message: "Done", user }); 
+  })
+

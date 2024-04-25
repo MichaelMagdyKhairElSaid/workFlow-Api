@@ -16,7 +16,8 @@ const workRecordSchema = new mongoose.Schema({
   },
   owner:{
     type:mongoose.Types.ObjectId,
-    ref:"Employee"
+    ref:"Employee",
+    required:[true,"record owner is required"]
   },
 });
 

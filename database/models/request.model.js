@@ -16,7 +16,7 @@ const requestSchema = new  mongoose.Schema({
     },
     reason:{
         type:String,
-        require:[true,"reason is required"],
+        required:[true,"reason is required"],
         enum:["sick","vacation","personal","other"],
     },
     description:{
