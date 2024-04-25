@@ -3,11 +3,15 @@ import requestModel from "../../../database/models/request.model.js";
 import deleteOne from "../../utils/handler/refactor.handler.js";
 import catchAsyncError from "../../utils/middleware/catchAsyncError.js";
 import ApiFeature from "../../utils/services/ApiFeatures.js";
+import AppError from "../../utils/services/AppError.js";
 
 export const createRequest = catchAsyncError(async(req,res,next)=>{
     req.body.owner = req.user._id;
     req.body.startDate = new Date(req.body.startDate); 
     req.body.endDate = new Date(req.body.endDate);
+    if (startDate >= endDate) {
+        return next(AppError(`End date must be after start date`,400))
+    }
    // Calculate duration in days using Moment.js
   const durationInDays = moment.duration(req.body.endDate - req.body.startDate).asDays();
   // Ensure non-negative duration (optional)
