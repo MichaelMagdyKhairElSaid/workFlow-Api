@@ -11,7 +11,7 @@ import taskRouter from './src/modules/tasks/task.routes.js';
 import notificationRouter from './src/modules/notification/notification.routes.js';
 import alertRouter from './src/modules/alert/alert.routes.js';
 const app = express();
-const port = 3000;
+const port =process.env.PORT || 3000;
 
 configDotenv(); // Add this line to configure dotenv
 
