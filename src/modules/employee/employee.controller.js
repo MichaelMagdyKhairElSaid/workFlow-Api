@@ -11,7 +11,6 @@ export const addUser = catchAsyncError(async (req, res, next) => {
     if (user) return next(new AppError("Duplicated Email", 409));
   
     //image upload
-    console.log("req.file===",req.file);
   if (req.file) {
 
     let {secure_url,public_id} =await cloudinary.uploader.upload(req.file.path,{folder:`workflow/${req.user.role}`})

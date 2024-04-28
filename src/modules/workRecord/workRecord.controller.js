@@ -8,9 +8,7 @@ import ApiFeature from "../../utils/services/ApiFeatures.js";
 export const clockIn = catchAsyncError(async (req, res, next) => {
     const existingRecord = await workRecordModel.findOne({
       clockIn: { $gte: moment().startOf('day').toDate(), $lt: moment().endOf('day').toDate() }
-    });
-    console.log("existingRecord",existingRecord);
-  
+    }); 
     if (existingRecord) {
     return next(new AppError(`Only one record can be created per day`,400))
     } else {
@@ -42,8 +40,6 @@ export const clockOut = catchAsyncError(async(req,res,next)=>{
   // Format working hours in HH:mm string
   const formattedWorkHours = `${workingHours.toString().padStart(2, '0')}:${workingMinutes.toString().padStart(2, '0')}`;
     let record = await workRecordModel.findOneAndUpdate({_id:existingRecord._id,owner:req.user._id},{ clockOut:currentDate ,workingHours:formattedWorkHours},{new:true});
-    const d = new Date();
-    console.log("date",d.toString());
     res.json({message:"done",record});
 })
 

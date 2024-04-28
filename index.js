@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 import dbConnection from './database/db_connection.js';
 import employeeRouter from './src/modules/employee/employee.routes.js';
 import { configDotenv } from 'dotenv';
@@ -11,11 +12,12 @@ import taskRouter from './src/modules/tasks/task.routes.js';
 import notificationRouter from './src/modules/notification/notification.routes.js';
 import alertRouter from './src/modules/alert/alert.routes.js';
 const app = express();
-const port =process.env.PORT || 3000;
+const port = 3000;
 
 configDotenv(); // Add this line to configure dotenv
 
 dbConnection();
+app.use(cors())
 app.use(express.json());
 app.use(express.static('uploads'));
 app.use(express.urlencoded({extended:true})) // to parse form data
@@ -33,6 +35,6 @@ app.all("*",(req,res,next)=>{ next(new AppError(`Invalid URL ${req.originalUrl}`
 
 app.use(globalError)
 
-app.listen(3000, () => {
+app.listen(process.env.PORT || port , () => {
     console.log(`server is running on port ${port}`);
 });

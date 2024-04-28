@@ -9,7 +9,6 @@ export const signIn =catchAsyncError(async(req, res, next)=>{
     let isFound = await employeeModel.findOne({ email });
     
     const match =  bcrypt.compareSync(password, isFound.password);
-    console.log("match",match);
     if (isFound && match) { 
         if (isFound.isActive == true){ return next(new AppError("you have account aready active", 409));}
         await employeeModel.findByIdAndUpdate(isFound.id,{isActive:true},{new:true}) 

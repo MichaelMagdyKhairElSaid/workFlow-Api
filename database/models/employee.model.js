@@ -53,8 +53,7 @@ image:{
 }
 }, {timestamps: true});
 
-employeeSchema.pre("save",function () { //return document that is object
-     console.log("this password ===",this.password); //document
+employeeSchema.pre("save",function () { //return document that is object of this schema
      if (this.password && this.password.trim()) {
          this.password = bcrypt.hashSync(this.password,Number(process.env.SALT_ROUNDS))
      }

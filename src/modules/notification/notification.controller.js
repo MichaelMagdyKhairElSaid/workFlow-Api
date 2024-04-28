@@ -5,7 +5,6 @@ import ApiFeature from "../../utils/services/ApiFeatures.js";
 
 export const createNotification = catchAsyncError(async (req, res, next) => {
   req.body.owner = req.user._id;
-  console.log(req.body);
   let results = new notificationModel(req.body);
   let send = await results.save();
   res.json({message: "Notification Sent", send });
