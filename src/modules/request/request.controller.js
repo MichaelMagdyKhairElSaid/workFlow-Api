@@ -9,8 +9,8 @@ export const createRequest = catchAsyncError(async(req,res,next)=>{
     req.body.owner = req.user._id;
     req.body.startDate = new Date(req.body.startDate); 
     req.body.endDate = new Date(req.body.endDate);
-    if (startDate >= endDate) {
-        return next(AppError(`End date must be after start date`,400))
+    if (req.body.startDate >= req.body.endDate) {
+        return next(new AppError(`End date must be after start date`,400))
     }
    // Calculate duration in days using Moment.js
   const durationInDays = moment.duration(req.body.endDate - req.body.startDate).asDays();
