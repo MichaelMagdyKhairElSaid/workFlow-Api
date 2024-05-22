@@ -2,10 +2,11 @@ import Joi from "joi";
 
 export const addTaskSchema = Joi.object({
     title:Joi.string().min(3).max(30).required(),
-    description:Joi.string().min(15).max(300).required(),
-    startdate:Joi.string().required(),
-    enddate:Joi.string().required(),
-    assignTo:Joi.string().hex().length(24).required()
+    description:Joi.string().min(5).max(300).required(),
+    startDate:Joi.string().required(),
+    endDate:Joi.string().required(),
+    assignTo:Joi.string().hex().length(24).required(),
+    status:Joi.string().valid("pending","done").required()
     })
 
     export const updateTaskSchema = Joi.object({

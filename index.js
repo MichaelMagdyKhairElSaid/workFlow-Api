@@ -11,6 +11,7 @@ import AppError from './src/utils/services/AppError.js';
 import taskRouter from './src/modules/tasks/task.routes.js';
 import notificationRouter from './src/modules/notification/notification.routes.js';
 import alertRouter from './src/modules/alert/alert.routes.js';
+import statisticalRouter from './src/modules/EMP_statistical/statistical.routes.js';
 const app = express();
 const port = 3000;
 
@@ -29,7 +30,7 @@ app.use("/api/v1/request",requestRouter)
 app.use("/api/v1/task",taskRouter)
 app.use("/api/v1/notification",notificationRouter)
 app.use("/api/v1/alert",alertRouter)
-
+app.use("/api/v1/statistical",statisticalRouter)
 
 app.all("*",(req,res,next)=>{ next(new AppError(`Invalid URL ${req.originalUrl}`,404)) }) //NOTE invalid url handeler must be after all routes
 

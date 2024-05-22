@@ -2,8 +2,8 @@ import mongoose from "mongoose";
 const requestSchema = new  mongoose.Schema({
     status:{
         type:String,
-        enum:["bending","accepted","rejected"],
-        default:"bending"
+        enum:["pending","accepted","rejected"],
+        default:"pending"
      },
      startDate:{
         type:Date, 

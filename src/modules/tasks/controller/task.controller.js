@@ -13,7 +13,7 @@ export const addTask = catchAsyncError(async (req, res,next) => {
     const assignTo = await employeeModel.findById(req.body.assignTo)
     //if assigned to isn't found
     if (!assignTo) {
-        next(new AppError(`User you want to assign this task not exist`,404))
+      return next(new AppError(`User you want to assign this task not exist`,404))
     }
 
     const startDate = new Date(req.body.startDate);
