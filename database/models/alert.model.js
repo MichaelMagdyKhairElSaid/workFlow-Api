@@ -20,7 +20,6 @@ owner:{
 },
 assignedTo:{
     type:Types.ObjectId,
-    required:[true,"Provide Employee ID"],
     ref:"Employee"
 }
 },{timestamps:true})
