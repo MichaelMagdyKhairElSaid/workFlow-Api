@@ -7,7 +7,7 @@ import ApiFeature from "../../utils/services/ApiFeatures.js";
 
 export const clockIn = catchAsyncError(async (req, res, next) => {
     const existingRecord = await workRecordModel.findOne({
-      clockIn: { $gte: moment().startOf('day').toDate(), $lt: moment().endOf('day').toDate() }
+      clockIn: { $gte: moment().startOf('day').toDate(), $lt: moment().endOf('day').toDate() },owner:req.user._id
     }); 
     if (existingRecord) {
     return next(new AppError(`Only one record can be created per day`,400))
