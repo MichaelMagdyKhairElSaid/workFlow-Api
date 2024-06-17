@@ -4,5 +4,6 @@ const authRouter = express.Router()
 
 authRouter.post("/signIn",authController.signIn)
 authRouter.post("/logOut",authController.logOut)
+authRouter.put("/changePassword",authController.protectRoutes,authController.ChangePassword)
 
 export default authRouter

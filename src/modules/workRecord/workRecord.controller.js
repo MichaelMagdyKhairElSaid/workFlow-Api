@@ -44,7 +44,7 @@ export const clockOut = catchAsyncError(async(req,res,next)=>{
 })
 
 export const getWorkRecords = catchAsyncError(async(req,res,next)=>{
-    let apiFeature= new ApiFeature(workRecordModel.find(),req.query).pagination().filter().sort().search().fields()
+    let apiFeature= new ApiFeature(workRecordModel.find(),req.query).filter().sort().search().fields()
     let result = await apiFeature.mongooseQuery
     res.json({message:"done",result});
 })

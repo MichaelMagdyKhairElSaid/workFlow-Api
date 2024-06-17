@@ -11,7 +11,7 @@ export const createNotification = catchAsyncError(async (req, res, next) => {
 });
 
 export const getAllNotification = catchAsyncError(async (req, res, next) => {
-  let apiFeature= new ApiFeature(notificationModel.find(),req.query).pagination().filter().sort().search().fields()
+  let apiFeature= new ApiFeature(notificationModel.find(),req.query).filter().sort().search().fields()
   let result = await apiFeature.mongooseQuery
   res.json({message:"done",result});
 });

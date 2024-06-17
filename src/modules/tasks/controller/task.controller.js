@@ -30,7 +30,7 @@ export const addTask = catchAsyncError(async (req, res,next) => {
 
 // get all tasks with user data 
 export const getAllTasks = async (req, res) => {
-    let apiFeature= new ApiFeature(taskModel.find().populate( {path:'assignTo',select:'name email'}),req.query).pagination().filter().sort().search().fields()
+    let apiFeature= new ApiFeature(taskModel.find().populate( {path:'assignTo',select:'name email'}),req.query).filter().sort().search().fields()
     let result = await apiFeature.mongooseQuery
     res.json({message:"Done",result});
   };

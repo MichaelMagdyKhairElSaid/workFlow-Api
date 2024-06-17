@@ -27,8 +27,8 @@ const requestSchema = new  mongoose.Schema({
         type:mongoose.Types.ObjectId,
         ref:"Employee"
       },
-    file:{
-        type:String,
+    image:{
+        type:Object,
     },
 }, {timestamps: true});
 

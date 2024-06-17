@@ -45,17 +45,14 @@ export const signIn =catchAsyncError(async(req, res, next)=>{
      })
     }
 
-    export const resetPassword=catchAsyncError(async(req,res,next)=>{
-        const {token}=req.params;
-        const {code}=req.body
-        let decoded = jwt.verify(token,process.env.ENCYPTION_KEY)
-        if (code == decoded.otp) {
-            let updatedUser= await userModel.findByIdAndUpdate(decoded.userld,{password:req.body.password},{new:true})
-            res.json({message:"password is reset",updatedUser})
-        }else{
-           return next(new AppError(`wrong code`,400))
-        }
-        }) 
+    export const ChangePassword = catchAsyncError(async(req,res,next)=>{ 
+        // req.body.changePassAt = Date.now()
+        let user = await employeeModel.findById(req.user._id)
+        if(!user) return next(new AppError(`user not found`,404))
+        user.password = req.body.password
+        await user.save()
+        res.json({message:"Done",user})
+       })
 
     export const logOut =catchAsyncError(async(req, res, next)=>{
         let {email} = req.body;

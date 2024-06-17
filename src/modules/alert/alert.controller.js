@@ -10,7 +10,7 @@ export const createAlert = catchAsyncError(async(req,res,next)=>{
 })
 
 export const getAllAlerts = catchAsyncError(async(req,res,next)=>{
-    let apiFeature= new ApiFeature(alertModel.find().populate("assignedTo","name , _id"),req.query).pagination().filter().sort().search().fields()
+    let apiFeature= new ApiFeature(alertModel.find().populate("assignedTo","name , _id"),req.query).filter().sort().search().fields()
     let result = await apiFeature.mongooseQuery
     res.json({message:"done",result});
 })

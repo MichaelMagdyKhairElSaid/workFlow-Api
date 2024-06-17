@@ -24,7 +24,7 @@ export const addUser = catchAsyncError(async (req, res, next) => {
   });
 
   export const getAllUsers =catchAsyncError( async (req, res) => {
-    let apiFeature= new ApiFeature(employeeModel.find(),req.query).pagination().filter().sort().search().fields()
+    let apiFeature= new ApiFeature(employeeModel.find(),req.query).filter().sort().search().fields()
     let result = await apiFeature.mongooseQuery
     res.json({message:"Done",result});
   })
@@ -40,7 +40,8 @@ export const addUser = catchAsyncError(async (req, res, next) => {
    const findUser = await employeeModel.findById(id);
     //image upload
     if (req.file) {
-    findUser.image && await cloudinary.uploader.destroy(findUser.image.public_id)
+      
+    findUser.image && await cloudinary.uploader.destroy(findUser.image.public_id)  //delete old image
 
     let {secure_url,public_id} =await cloudinary.uploader.upload(req.file.path,{folder:`workflow/${req.user.role}`})
      req.body.image = {secure_url,public_id};
