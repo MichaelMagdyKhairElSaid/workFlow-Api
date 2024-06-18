@@ -19,6 +19,7 @@ export const createRequest = catchAsyncError(async(req,res,next)=>{
   req.body.duration = Math.max(0, durationInDays); // Handles cases where endDate < startDate
      
   //image upload
+  delete req.body.image // delete image from req.body to avoid error
    if (req.file) {
       let {secure_url,public_id} =await cloudinary.uploader.upload(req.file.path,{folder:`workflow/requests_attachments`})
       req.body.image = {secure_url,public_id};
