@@ -10,6 +10,7 @@ export const addUser = catchAsyncError(async (req, res, next) => {
     let user = await employeeModel.findOne({ email: req.body.email });
     if (user) return next(new AppError("Duplicated Email", 409));
   
+    delete req.body.image //to avoid error
     //image upload
   if (req.file) {
 
@@ -38,6 +39,7 @@ export const addUser = catchAsyncError(async (req, res, next) => {
   export const editUser = catchAsyncError(async (req, res, next) => {
     let { id } = req.params;
    const findUser = await employeeModel.findById(id);
+   delete req.body.image //to avoid error
     //image upload
     if (req.file) {
       
