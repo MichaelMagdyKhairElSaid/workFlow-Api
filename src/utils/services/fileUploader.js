@@ -2,7 +2,7 @@ import multer from "multer"
 import AppError from "./AppError.js"
 
 export const acceptedExtention ={
-    image:["image/jpeg","image/png"],
+    image:["image/jpeg","image/png","image/jpg","image/gif"],
     pdf:["application/pdf"],
 }
 
