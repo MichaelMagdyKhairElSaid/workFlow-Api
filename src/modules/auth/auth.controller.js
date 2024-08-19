@@ -7,7 +7,7 @@ import AppError from "../../utils/services/AppError.js";
 export const signIn =catchAsyncError(async(req, res, next)=>{
     let { email, password } = req.body;
     let isFound = await employeeModel.findOne({ email });
-    
+    if(!isFound){return next(new AppError("User not found", 401))} //handel if user's email not found
     const match =  bcrypt.compareSync(password, isFound.password);
     if (isFound && match) { 
         if (isFound.isActive == true){ return next(new AppError("you have account aready active", 409));}
@@ -15,7 +15,7 @@ export const signIn =catchAsyncError(async(req, res, next)=>{
       let token = jwt.sign({ name: isFound.name, userld: isFound._id, role: isFound.role },process.env.ENCYPTION_KEY)
         return res.json({message:"success",token  })
         }
-    next(new AppError("incorrect email or password", 401))
+    next(new AppError("incorrect password", 401))
     })
 
     export const protectRoutes = catchAsyncError(async(req,res,next)=>{
